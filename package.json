@@ -8,7 +8,7 @@
     "server": "nodemon server.js"
   },
   "author": "Andrew Kyu",
-  "license": "MIT",
+  "license": "asdf",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
