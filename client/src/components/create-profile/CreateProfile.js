@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import InputGroup from "../common/InputGroup";
 import SelectListGroup from "../common/SelectListGroup";
+import { createProfile } from "../../actions/profileActions";
 
 class CreateProfile extends Component {
   constructor(props) {
@@ -31,10 +33,32 @@ class CreateProfile extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
-    console.log("submit");
+    const profileData = {
+      handle: this.state.handle,
+      company: this.state.company,
+      website: this.state.website,
+      location: this.state.location,
+      status: this.state.status,
+      skills: this.state.skills,
+      githubusername: this.state.githubusername,
+      bio: this.state.bio,
+      twitter: this.state.twitter,
+      facebook: this.state.facebook,
+      linkedin: this.state.linkedin,
+      youtube: this.state.youtube,
+      instagram: this.state.instagram
+    };
+
+    this.props.createProfile(profileData, this.props.history);
   }
 
   onChange(e) {
@@ -121,7 +145,7 @@ class CreateProfile extends Component {
                   placeholder="* Profile Handle"
                   name="handle"
                   value={this.state.handle}
-                  onChange={this.onchange}
+                  onChange={this.onChange}
                   error={errors.handle}
                   info="A unique handle for your profile URL. Your full name, company name, nickname"
                 />
@@ -129,7 +153,7 @@ class CreateProfile extends Component {
                   placeholder="Status"
                   name="status"
                   value={this.state.status}
-                  onChange={this.onchange}
+                  onChange={this.onChange}
                   error={errors.status}
                   options={options}
                   info="Give us an idea of where you are at in your career"
@@ -138,7 +162,7 @@ class CreateProfile extends Component {
                   placeholder="Company"
                   name="company"
                   value={this.state.company}
-                  onChange={this.onchange}
+                  onChange={this.onChange}
                   error={errors.company}
                   info="Could be your own company or one you work for"
                 />
@@ -146,7 +170,7 @@ class CreateProfile extends Component {
                   placeholder="Website"
                   name="website"
                   value={this.state.website}
-                  onChange={this.onchange}
+                  onChange={this.onChange}
                   error={errors.website}
                   info="Could be your own website or a company one"
                 />
@@ -154,7 +178,7 @@ class CreateProfile extends Component {
                   placeholder="Location"
                   name="location"
                   value={this.state.location}
-                  onChange={this.onchange}
+                  onChange={this.onChange}
                   error={errors.location}
                   info="City or city & state suggested (eg. San Jose, CA)"
                 />
@@ -162,7 +186,7 @@ class CreateProfile extends Component {
                   placeholder="* Skills"
                   name="skills"
                   value={this.state.skills}
-                  onChange={this.onchange}
+                  onChange={this.onChange}
                   error={errors.skills}
                   info="Please use comma seperated values (eg. HTML, CSS, JavaScript, Python)"
                 />
@@ -170,7 +194,7 @@ class CreateProfile extends Component {
                   placeholder="Github Username"
                   name="githubusername"
                   value={this.state.githubusername}
-                  onChange={this.onchange}
+                  onChange={this.onChange}
                   error={errors.githubusername}
                   info="If you want your latest repos and a Github link, include your username"
                 />
@@ -184,6 +208,7 @@ class CreateProfile extends Component {
                 />
                 <div className="mb-3">
                   <button
+                    type="button"
                     onClick={() => {
                       this.setState(prevState => ({
                         displaySocialInputs: !prevState.displaySocialInputs
@@ -220,4 +245,7 @@ const mapStateToProp = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProp)(CreateProfile);
+export default connect(
+  mapStateToProp,
+  { createProfile }
+)(withRouter(CreateProfile));
