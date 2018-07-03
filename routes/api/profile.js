@@ -177,7 +177,7 @@ router.post(
     }
 
     //Query the database to find the user
-    Profile.findOne({ user: req.body.user }).then(profile => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
       const newExp = {
         title: req.body.title,
         company: req.body.company,
@@ -187,11 +187,10 @@ router.post(
         current: req.body.current,
         description: req.body.description
       };
+      profile.experience.unshift(newExp);
+
+      profile.save().then(profile => res.json(profile));
     });
-
-    profile.experience.unshift(newExp);
-
-    profile.save().then(profile => res.json(profile));
   }
 );
 
